@@ -12,8 +12,6 @@ const querystring = require("querystring");
 const CLIENT_ID =
   "1071006060591-tmhssin2h21lcre235vtolojh4g403ep.apps.googleusercontent.com";
 const CLIENT_SECRET = "GOCSPX" + "-" + "K58FWR486LdLJ1mLB8sXC4z6qDAf";
-const PORT = 19816;
-const REDIRECT_URI = `http://localhost:${PORT}/oauth-callback`;
 const TOKEN_ENDPOINT = "https://oauth2.googleapis.com/token";
 const SCOPES = [
   "https://www.googleapis.com/auth/cloud-platform",
@@ -23,20 +21,27 @@ const SCOPES = [
   "https://www.googleapis.com/auth/experimentsandconfigs",
 ];
 
-const AUTH_URL =
-  "https://accounts.google.com/o/oauth2/v2/auth?" +
-  querystring.stringify({
-    access_type: "offline",
-    scope: SCOPES.join(" "),
-    prompt: "consent",
-    response_type: "code",
-    client_id: CLIENT_ID,
-    redirect_uri: REDIRECT_URI,
-  });
+function buildAuthUrl(port) {
+  const redirectUri = `http://localhost:${port}/oauth-callback`;
+  return {
+    redirectUri,
+    authUrl:
+      "https://accounts.google.com/o/oauth2/v2/auth?" +
+      querystring.stringify({
+        access_type: "offline",
+        scope: SCOPES.join(" "),
+        prompt: "consent",
+        response_type: "code",
+        client_id: CLIENT_ID,
+        redirect_uri: redirectUri,
+      }),
+  };
+}
 
 // ---- HTML ----
 
-const HOME_PAGE = `<!DOCTYPE html>
+function makeHomePage(authUrl) {
+  return `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Antigravity OAuth</title>
@@ -55,9 +60,10 @@ const HOME_PAGE = `<!DOCTYPE html>
   <div class="logo">&#x1F680;</div>
   <h1>Antigravity OAuth</h1>
   <p class="sub">Click below to sign in with Google and get your refresh token.</p>
-  <a class="btn" href="${AUTH_URL}">Sign in with Google</a>
+  <a class="btn" href="${authUrl}">Sign in with Google</a>
   <p class="footer">Token will be saved to antigravity_tokens.json</p>
 </div></body></html>`;
+}
 
 function makeSuccessPage(email, refreshToken) {
   return `<!DOCTYPE html>
@@ -128,13 +134,13 @@ function parseEmailFromIdToken(idToken) {
   }
 }
 
-function exchangeCode(code) {
+function exchangeCode(code, redirectUri) {
   return new Promise((resolve, reject) => {
     const postData = querystring.stringify({
       code,
       client_id: CLIENT_ID,
       client_secret: CLIENT_SECRET,
-      redirect_uri: REDIRECT_URI,
+      redirect_uri: redirectUri,
       grant_type: "authorization_code",
     });
 
@@ -212,11 +218,14 @@ function html(res, statusCode, body) {
 
 // ---- Server ----
 
+let currentRedirectUri = "";
+let currentAuthUrl = "";
+
 const server = http.createServer(async (req, res) => {
   const parsed = url.parse(req.url, true);
 
   if (parsed.pathname === "/") {
-    html(res, 200, HOME_PAGE);
+    html(res, 200, makeHomePage(currentAuthUrl));
     return;
   }
 
@@ -233,7 +242,7 @@ const server = http.createServer(async (req, res) => {
     console.log("[*] Exchanging for tokens...");
 
     try {
-      const tokens = await exchangeCode(code);
+      const tokens = await exchangeCode(code, currentRedirectUri);
       const { email, outPath } = saveAccount(tokens);
       console.log(`[OK] email: ${email}`);
       console.log(`[OK] refresh_token: ${tokens.refresh_token}`);
@@ -250,8 +259,14 @@ const server = http.createServer(async (req, res) => {
   res.end();
 });
 
-server.listen(PORT, "127.0.0.1", () => {
-  const localUrl = `http://localhost:${PORT}`;
+// Listen on port 0 to let OS pick a free port
+server.listen(0, "127.0.0.1", () => {
+  const port = server.address().port;
+  const { redirectUri, authUrl } = buildAuthUrl(port);
+  currentRedirectUri = redirectUri;
+  currentAuthUrl = authUrl;
+
+  const localUrl = `http://localhost:${port}`;
   console.log(`[*] Server running at ${localUrl}`);
   console.log("[*] Opening browser...");
   openBrowser(localUrl);
