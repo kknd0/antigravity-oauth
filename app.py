@@ -12,14 +12,18 @@ import sys
 import os
 import base64
 import webbrowser
+import traceback
 from datetime import datetime, timezone
 from urllib import request as urllib_request
+from urllib.error import HTTPError
 
 # PyInstaller --windowed on macOS sets stdout/stderr to None, which crashes print()
-if sys.stdout is None:
-    sys.stdout = open(os.devnull, "w")
-if sys.stderr is None:
-    sys.stderr = open(os.devnull, "w")
+_log_file = None
+if sys.stdout is None or sys.stderr is None:
+    _log_path = os.path.join(os.path.expanduser("~"), "Desktop", "antigravity-oauth.log")
+    _log_file = open(_log_path, "w")
+    sys.stdout = _log_file
+    sys.stderr = _log_file
 from urllib.error import HTTPError
 
 # ---- Config ----
@@ -383,4 +387,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception:
+        # Write crash info to Desktop log
+        crash_path = os.path.join(os.path.expanduser("~"), "Desktop", "antigravity-oauth-crash.log")
+        with open(crash_path, "w") as f:
+            traceback.print_exc(file=f)
+        raise
