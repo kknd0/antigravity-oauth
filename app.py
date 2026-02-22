@@ -14,6 +14,12 @@ import base64
 import webbrowser
 from datetime import datetime, timezone
 from urllib import request as urllib_request
+
+# PyInstaller --windowed on macOS sets stdout/stderr to None, which crashes print()
+if sys.stdout is None:
+    sys.stdout = open(os.devnull, "w")
+if sys.stderr is None:
+    sys.stderr = open(os.devnull, "w")
 from urllib.error import HTTPError
 
 # ---- Config ----
