@@ -44,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact }}
-          path: dist/Antigravity-OAuth-macOS.zip
+          path: dist/Antigravity-OAuth-macOS.dmg
 
       # Windows: upload .exe
       - name: Upload Windows artifact
@@ -76,7 +76,7 @@ jobs:
       - name: Prepare release files
         run: |
           mkdir -p release
-          cp artifacts/Antigravity-OAuth-macOS/Antigravity-OAuth-macOS.zip release/
+          cp artifacts/Antigravity-OAuth-macOS/Antigravity-OAuth-macOS.dmg release/
           cp artifacts/Antigravity-OAuth-Windows/Antigravity-OAuth.exe release/Antigravity-OAuth-Windows.exe
           cp artifacts/Antigravity-OAuth-Linux/Antigravity-OAuth release/Antigravity-OAuth-Linux
           ls -lh release/

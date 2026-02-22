@@ -44,14 +44,20 @@ def build():
     subprocess.check_call(cmd)
 
     if system == "Darwin":
-        # Zip the .app bundle for distribution
+        # Create DMG for macOS distribution
         app_path = f"dist/{APP_NAME}.app"
-        zip_path = f"dist/{APP_NAME}-macOS"
-        if os.path.exists(f"{zip_path}.zip"):
-            os.remove(f"{zip_path}.zip")
-        shutil.make_archive(zip_path, "zip", "dist", f"{APP_NAME}.app")
-        print(f"\n[OK] macOS app: dist/{APP_NAME}.app")
-        print(f"[OK] Zip ready: {zip_path}.zip")
+        dmg_path = f"dist/{APP_NAME}-macOS.dmg"
+        if os.path.exists(dmg_path):
+            os.remove(dmg_path)
+        subprocess.check_call([
+            "hdiutil", "create",
+            "-volname", APP_NAME,
+            "-srcfolder", app_path,
+            "-ov", "-format", "UDZO",
+            dmg_path,
+        ])
+        print(f"\n[OK] macOS app: {app_path}")
+        print(f"[OK] DMG ready: {dmg_path}")
     elif system == "Windows":
         print(f"\n[OK] Windows exe: dist\\{APP_NAME}.exe")
     else:
