@@ -342,6 +342,14 @@ def save_account(tokens: dict) -> tuple:
 
 
 def get_app_dir():
+    """Return a writable directory for saving tokens."""
+    # For macOS .app bundles, the executable is inside the bundle (read-only on DMG).
+    # Always save to user's Desktop for easy access.
+    if sys.platform == "darwin":
+        desktop = os.path.join(os.path.expanduser("~"), "Desktop")
+        if os.path.isdir(desktop):
+            return desktop
+    # For Windows/Linux, save next to the executable
     if getattr(sys, "frozen", False):
         return os.path.dirname(sys.executable)
     return os.path.dirname(os.path.abspath(__file__))
