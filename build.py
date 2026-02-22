@@ -10,6 +10,7 @@ Usage:
 
 import platform
 import subprocess
+import shutil
 import sys
 import os
 
@@ -23,25 +24,38 @@ def build():
 
     cmd = [
         sys.executable, "-m", "PyInstaller",
-        "--onefile",
         "--name", APP_NAME,
         "--clean",
         "--noconfirm",
-        SCRIPT,
     ]
+
+    if system == "Darwin":
+        # macOS: .app bundle so users can double-click
+        cmd.extend(["--onedir", "--windowed"])
+    else:
+        # Windows / Linux: single file
+        cmd.append("--onefile")
+        if system == "Windows":
+            cmd.append("--windowed")  # no console flash
+
+    cmd.append(SCRIPT)
 
     print("Running:", " ".join(cmd))
     subprocess.check_call(cmd)
 
     if system == "Darwin":
-        print(f"\n[OK] macOS binary: dist/{APP_NAME}")
-        print("     Double-click or run: ./dist/" + APP_NAME)
+        # Zip the .app bundle for distribution
+        app_path = f"dist/{APP_NAME}.app"
+        zip_path = f"dist/{APP_NAME}-macOS"
+        if os.path.exists(f"{zip_path}.zip"):
+            os.remove(f"{zip_path}.zip")
+        shutil.make_archive(zip_path, "zip", "dist", f"{APP_NAME}.app")
+        print(f"\n[OK] macOS app: dist/{APP_NAME}.app")
+        print(f"[OK] Zip ready: {zip_path}.zip")
     elif system == "Windows":
-        print(f"\n[OK] Windows exe:  dist\\{APP_NAME}.exe")
-        print("     Double-click to run!")
+        print(f"\n[OK] Windows exe: dist\\{APP_NAME}.exe")
     else:
         print(f"\n[OK] Linux binary: dist/{APP_NAME}")
-        print("     Run: ./dist/" + APP_NAME)
 
 
 if __name__ == "__main__":

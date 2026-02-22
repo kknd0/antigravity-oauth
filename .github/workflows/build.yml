@@ -38,19 +38,29 @@ jobs:
       - name: Build
         run: python build.py
 
-      - name: Rename artifact (Unix)
-        if: runner.os != 'Windows'
-        run: mv dist/Antigravity-OAuth dist/${{ matrix.artifact }}
-
-      - name: Rename artifact (Windows)
-        if: runner.os == 'Windows'
-        run: mv dist/Antigravity-OAuth.exe dist/${{ matrix.artifact }}.exe
-
-      - name: Upload artifact
+      # macOS: upload the .zip of the .app bundle
+      - name: Upload macOS artifact
+        if: runner.os == 'macOS'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact }}
-          path: dist/${{ matrix.artifact }}*
+          path: dist/Antigravity-OAuth-macOS.zip
+
+      # Windows: upload .exe
+      - name: Upload Windows artifact
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: dist/Antigravity-OAuth.exe
+
+      # Linux: upload binary
+      - name: Upload Linux artifact
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: dist/Antigravity-OAuth
 
   release:
     needs: build
@@ -63,11 +73,16 @@ jobs:
         with:
           path: artifacts
 
-      - name: List artifacts
-        run: find artifacts -type f | head -20
+      - name: Prepare release files
+        run: |
+          mkdir -p release
+          cp artifacts/Antigravity-OAuth-macOS/Antigravity-OAuth-macOS.zip release/
+          cp artifacts/Antigravity-OAuth-Windows/Antigravity-OAuth.exe release/Antigravity-OAuth-Windows.exe
+          cp artifacts/Antigravity-OAuth-Linux/Antigravity-OAuth release/Antigravity-OAuth-Linux
+          ls -lh release/
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
-          files: artifacts/**/*
+          files: release/*
