@@ -1,0 +1,14 @@
+{
+  "name": "antigravity-oauth",
+  "version": "1.0.0",
+  "description": "One-click tool to get Google OAuth refresh tokens for Antigravity",
+  "bin": {
+    "antigravity-oauth": "index.js"
+  },
+  "keywords": ["antigravity", "google", "oauth", "refresh-token"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kknd0/antigravity-oauth"
+  }
+}

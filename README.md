@@ -6,9 +6,21 @@
 
 ## English
 
-One-click tool to get your Google OAuth refresh token for [Antigravity](https://labs.google/antigravity). No Python required.
+Get your Google OAuth refresh token for [Antigravity](https://labs.google/antigravity) with one command.
 
-### Download
+### Quick Start (Recommended)
+
+```bash
+npx antigravity-oauth
+```
+
+That's it. Browser opens, sign in with Google, token saved to `antigravity_tokens.json`.
+
+> Requires [Node.js](https://nodejs.org/) installed.
+
+### Download Executables
+
+No Node.js? Download a standalone executable:
 
 | Platform | Download |
 |----------|----------|
@@ -16,20 +28,11 @@ One-click tool to get your Google OAuth refresh token for [Antigravity](https://
 | macOS | [Antigravity-OAuth-macOS.dmg](https://github.com/kknd0/antigravity-oauth/releases/latest/download/Antigravity-OAuth-macOS.dmg) |
 | Linux | [Antigravity-OAuth-Linux](https://github.com/kknd0/antigravity-oauth/releases/latest/download/Antigravity-OAuth-Linux) |
 
-### Usage
+> macOS: If it shows "damaged", run `xattr -cr Antigravity-OAuth.app` then right-click → Open.
 
-1. Download for your platform
-2. **Windows**: Double-click the `.exe`
-3. **macOS**: Open the `.dmg`, drag app out. If it shows "damaged", run in Terminal:
-   ```bash
-   xattr -cr /path/to/Antigravity-OAuth.app
-   ```
-   Then right-click → Open.
-4. **Linux**: `chmod +x Antigravity-OAuth-Linux && ./Antigravity-OAuth-Linux`
-3. Browser opens — sign in with Google
-4. Refresh token is saved to `antigravity_tokens.json` in the same directory
+### Output
 
-Supports multiple accounts — each login appends to the file:
+Tokens are saved to `antigravity_tokens.json` in the current directory:
 
 ```json
 {
@@ -44,20 +47,27 @@ Supports multiple accounts — each login appends to the file:
 }
 ```
 
-### Build from source
-
-```bash
-pip install pyinstaller
-python build.py
-```
+Supports multiple accounts — run again to add more.
 
 ---
 
 ## 中文
 
-一键获取 [Antigravity（反重力）](https://labs.google/antigravity) 的 Google OAuth refresh token，无需安装 Python。
+一条命令获取 [Antigravity（反重力）](https://labs.google/antigravity) 的 Google OAuth refresh token。
 
-### 下载
+### 快速开始（推荐）
+
+```bash
+npx antigravity-oauth
+```
+
+浏览器自动打开，登录 Google，token 自动保存到当前目录的 `antigravity_tokens.json`。
+
+> 需要安装 [Node.js](https://nodejs.org/)。
+
+### 下载可执行文件
+
+没有 Node.js？下载独立可执行文件：
 
 | 平台 | 下载链接 |
 |------|---------|
@@ -65,20 +75,11 @@ python build.py
 | macOS | [Antigravity-OAuth-macOS.dmg](https://github.com/kknd0/antigravity-oauth/releases/latest/download/Antigravity-OAuth-macOS.dmg) |
 | Linux | [Antigravity-OAuth-Linux](https://github.com/kknd0/antigravity-oauth/releases/latest/download/Antigravity-OAuth-Linux) |
 
-### 使用方法
+> macOS：如果提示"已损坏"，在终端执行 `xattr -cr Antigravity-OAuth.app`，然后右键 → 打开。
 
-1. 下载对应平台的文件
-2. **Windows**：双击 `.exe` 运行
-3. **macOS**：打开 `.dmg`，将 app 拖出。如果提示"已损坏"，在终端执行：
-   ```bash
-   xattr -cr /path/to/Antigravity-OAuth.app
-   ```
-   然后右键点击 → 打开。
-4. **Linux**：`chmod +x Antigravity-OAuth-Linux && ./Antigravity-OAuth-Linux`
-3. 浏览器自动打开 — 登录 Google 账号
-4. refresh token 自动保存到同目录下的 `antigravity_tokens.json`
+### 输出格式
 
-支持多账号 — 每次登录会追加到文件中：
+Token 保存到当前目录的 `antigravity_tokens.json`：
 
 ```json
 {
@@ -93,12 +94,7 @@ python build.py
 }
 ```
 
-### 从源码构建
-
-```bash
-pip install pyinstaller
-python build.py
-```
+支持多账号，再次运行可添加更多账号。
 
 ## License
 

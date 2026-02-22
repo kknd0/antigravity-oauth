@@ -24,7 +24,6 @@ if sys.stdout is None or sys.stderr is None:
     _log_file = open(_log_path, "w")
     sys.stdout = _log_file
     sys.stderr = _log_file
-from urllib.error import HTTPError
 
 # ---- Config ----
 # Public OAuth client credentials for desktop/installed app (same as Antigravity-Manager)

@@ -6,3 +6,4 @@ dist/
 *.egg-info/
 antigravity_tokens.json
 .DS_Store
+node_modules/
