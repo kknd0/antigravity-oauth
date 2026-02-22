@@ -13,13 +13,15 @@ One-click tool to get your Google OAuth refresh token for [Antigravity](https://
 | Platform | Download |
 |----------|----------|
 | Windows | [Antigravity-OAuth-Windows.exe](https://github.com/kknd0/antigravity-oauth/releases/latest/download/Antigravity-OAuth-Windows.exe) |
-| macOS | [Antigravity-OAuth-macOS](https://github.com/kknd0/antigravity-oauth/releases/latest/download/Antigravity-OAuth-macOS) |
+| macOS | [Antigravity-OAuth-macOS.zip](https://github.com/kknd0/antigravity-oauth/releases/latest/download/Antigravity-OAuth-macOS.zip) |
 | Linux | [Antigravity-OAuth-Linux](https://github.com/kknd0/antigravity-oauth/releases/latest/download/Antigravity-OAuth-Linux) |
 
 ### Usage
 
-1. Download the executable for your platform
-2. Double-click to run (macOS/Linux: `chmod +x` first)
+1. Download for your platform
+2. **Windows**: Double-click the `.exe`
+3. **macOS**: Unzip, right-click the `.app` → Open (first time only, to bypass Gatekeeper)
+4. **Linux**: `chmod +x Antigravity-OAuth-Linux && ./Antigravity-OAuth-Linux`
 3. Browser opens — sign in with Google
 4. Refresh token is saved to `antigravity_tokens.json` in the same directory
 
@@ -56,13 +58,15 @@ python build.py
 | 平台 | 下载链接 |
 |------|---------|
 | Windows | [Antigravity-OAuth-Windows.exe](https://github.com/kknd0/antigravity-oauth/releases/latest/download/Antigravity-OAuth-Windows.exe) |
-| macOS | [Antigravity-OAuth-macOS](https://github.com/kknd0/antigravity-oauth/releases/latest/download/Antigravity-OAuth-macOS) |
+| macOS | [Antigravity-OAuth-macOS.zip](https://github.com/kknd0/antigravity-oauth/releases/latest/download/Antigravity-OAuth-macOS.zip) |
 | Linux | [Antigravity-OAuth-Linux](https://github.com/kknd0/antigravity-oauth/releases/latest/download/Antigravity-OAuth-Linux) |
 
 ### 使用方法
 
-1. 下载对应平台的可执行文件
-2. 双击运行（macOS/Linux 需先 `chmod +x` 添加执行权限）
+1. 下载对应平台的文件
+2. **Windows**：双击 `.exe` 运行
+3. **macOS**：解压 zip，右键点击 `.app` → 打开（首次需要这样操作以绕过 Gatekeeper）
+4. **Linux**：`chmod +x Antigravity-OAuth-Linux && ./Antigravity-OAuth-Linux`
 3. 浏览器自动打开 — 登录 Google 账号
 4. refresh token 自动保存到同目录下的 `antigravity_tokens.json`
 
